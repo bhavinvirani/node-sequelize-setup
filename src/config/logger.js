@@ -19,7 +19,7 @@ const createFileTransport = (level, filename) => {
     zippedArchive: true,
     maxSize: '20m',
     maxFiles: '14d',
-    format: format.combine(format.timestamp(), format.json()),
+    format: format.combine(format.timestamp({ format: 'DD-MM-YYYY HH:mm:ss' }), format.json()),
   });
 };
 

@@ -3,7 +3,7 @@ const path = require('path');
 const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
 const config = require('../../config/config');
-const dbConfig = require('../../config/db')[config.env];
+const dbConfig = require('../../config/database')[config.env];
 const dbOptions = {
   host: dbConfig.host,
   port: dbConfig.port,

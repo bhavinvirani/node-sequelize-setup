@@ -5,7 +5,7 @@ const logger = require('./config/logger');
 const app = require('./app');
 
 const port = config.port || 8080;
-app.listen(port, async () => {
+const server = app.listen(port, async () => {
   try {
     await sequelize.authenticate();
     logger.info('DB connection has been established successfully.');
@@ -16,14 +16,25 @@ app.listen(port, async () => {
   }
 });
 
+const exitHandler = () => {
+  if (server) {
+    server.close(() => {
+      logger.info('Server closed');
+      process.exit(1);
+    });
+  } else {
+    process.exit(1);
+  }
+};
+
 process.on('uncaughtException', (error) => {
   logger.error('Uncaught Exception:', error);
-  process.exit(1);
+  exitHandler();
 });
 
 process.on('unhandledRejection', (reason, promise) => {
   logger.error('Unhandled Rejection at:', promise, 'reason:', reason);
-  process.exit(1);
+  exitHandler();
 });
 
 process.on('SIGTERM', async () => {
