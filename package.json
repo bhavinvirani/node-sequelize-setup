@@ -1,18 +1,46 @@
 {
-  "name": "node-backend",
+  "name": "node-sequelize-setup",
   "version": "1.0.0",
-  "description": "Starting setup for node.js backend project",
-  "main": "server.js",
+  "description": "Starting setup for node.js backend project with sequelize ORM and postgres database",
+  "main": "src/server.js",
+  "repository": "https://github.com/bhavinvirani/node-sequelize-setup",
+  "author": "Bhavin Virani <bhavinvirani45@gmail.com>",
+  "contributors": [
+    {
+      "name": "Bhavin Virani",
+      "email": "bhavinvirani@gmail.com"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/bhavinvirani/node-sequelize-setup/issues"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./src/server.js",
-    "dev": "nodemon ./src/server.js"
+    "dev": "nodemon ./src/server.js",
+    "prettier": "prettier --check **/*.js"
   },
   "keywords": [
+    "boilerplate",
     "setup",
-    "node.js"
+    "backend",
+    "node",
+    "node.js",
+    "express.js",
+    "sequelize",
+    "postgres",
+    "morgan",
+    "winston",
+    "error-handling",
+    "logging",
+    "REST",
+    "API",
+    "prettier",
+    "npm",
+    "jwt",
+    "authentication",
+    "tokens"
   ],
-  "author": "Bhavin Virani",
   "license": "ISC",
   "devDependencies": {
     "morgan": "^1.10.0",

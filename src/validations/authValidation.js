@@ -44,7 +44,6 @@ const resetPassword = {
   }),
 };
 
-
 const verifyEmail = {
   query: joi.object().keys({
     token: joi.string().required(),

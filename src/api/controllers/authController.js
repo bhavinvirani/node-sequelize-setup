@@ -1,29 +1,17 @@
 const { successResponse } = require('../../utils/apiResponse');
 const asyncWrapper = require('../../middlewares/asyncHandler');
 const { authService, tokenService, emailService } = require('../services');
-const { tokenType } = require('../../config/constants');
-
 
 const signUp = asyncWrapper(async (req, res, next) => {
   const user = await authService.signUp(req.body);
   const tokens = await tokenService.generateAuthTokens(user);
-  return successResponse(
-    res,
-    201,
-    { user, tokens },
-    'User Created Successfully'
-  );
+  return successResponse(res, 201, { user, tokens }, 'User Created Successfully');
 });
 
 const login = asyncWrapper(async (req, res, next) => {
   const user = await authService.login(req.body);
   const tokens = await tokenService.generateAuthTokens(user);
-  return successResponse(
-    res,
-    200,
-    { user, tokens },
-    'User Logged In Successfully'
-  );
+  return successResponse(res, 200, { user, tokens }, 'User Logged In Successfully');
 });
 
 const logout = asyncWrapper(async (req, res, next) => {
@@ -39,12 +27,7 @@ const refreshTokens = asyncWrapper(async (req, res, next) => {
 const forgotPassword = asyncWrapper(async (req, res, next) => {
   const token = await authService.forgotPassword(req.body.email);
   await emailService.sendResetPasswordEmail(req.body.email, token);
-  return successResponse(
-    res,
-    200,
-    { token },
-    'Password reset token sent to email'
-  );
+  return successResponse(res, 200, { token }, 'Password reset token sent to email');
 });
 
 const resetPassword = asyncWrapper(async (req, res, next) => {
@@ -53,13 +36,8 @@ const resetPassword = asyncWrapper(async (req, res, next) => {
 });
 
 const sendVerificationEmail = asyncWrapper(async (req, res, next) => {
-  const emailVerificationToken = await tokenService.generateVerifyEmailToken(
-    req.user
-  );
-  await emailService.sendVerificationEmail(
-    req.user.email,
-    emailVerificationToken
-  );
+  const emailVerificationToken = await tokenService.generateVerifyEmailToken(req.user);
+  await emailService.sendVerificationEmail(req.user.email, emailVerificationToken);
   return successResponse(
     res,
     200,

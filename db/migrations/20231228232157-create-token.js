@@ -16,13 +16,19 @@ module.exports = {
         unique: true,
       },
       type: {
-        type: Sequelize.ENUM(tokenType.REFRESH, tokenType.ACCESS, tokenType.JWT, tokenType.EMAIL_VERIFICATION, tokenType.PASSWORD_RESET),
+        type: Sequelize.ENUM(
+          tokenType.REFRESH,
+          tokenType.ACCESS,
+          tokenType.JWT,
+          tokenType.EMAIL_VERIFICATION,
+          tokenType.PASSWORD_RESET
+        ),
         allowNull: false,
       },
       userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references:{
+        references: {
           model: 'Users',
           key: 'id',
         },

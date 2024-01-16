@@ -6,7 +6,7 @@ const errorConsoleTransport = new transports.Console({
     format.colorize(),
     format.errors({ stack: true }),
     format.splat(),
-    format.printf((info) => `${info.timestamp} - ${info.level}: ${info.message}`),
+    format.printf((info) => `${info.timestamp} - ${info.level}: ${info.message}`)
   ),
 });
 
@@ -30,13 +30,9 @@ const logger = createLogger({
     }),
     format.errors({ stack: true }),
     format.splat(),
-    format.json(),
+    format.json()
   ),
-  transports: [
-    errorConsoleTransport,
-    createFileTransport('error', 'error'),
-    createFileTransport('info', 'info'),
-  ],
+  transports: [errorConsoleTransport, createFileTransport('error', 'error'), createFileTransport('info', 'info')],
 });
 
 module.exports = logger;

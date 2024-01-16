@@ -14,26 +14,21 @@ const verifyToken = async (req, res, next) => {
     });
   }
   try {
-    const accessTokenDoc = jwt.verify(
-      accessToken,
-      config.jwt.accessTokenSecret
-    );
+    const accessTokenDoc = jwt.verify(accessToken, config.jwt.accessTokenSecret);
     const user = await userService.getById(accessTokenDoc.sub);
     req.user = user;
     next();
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
-      error.isTokenExpired = true;
+      error.isTokenAccessTokenExpired = true;
       return res.status(403).send({
         status: false,
         message: 'Access token has expired',
         data: null,
-        isTokenExpired: true,
+        isAccessTokenExpired: true,
       });
     }
-    logger.error(
-      `Message: ${error.message} || Status: ${error.statusCode} || Stack: ${error.stack}`
-    );
+    logger.error(`Message: ${error.message} || Status: ${error.statusCode} || Stack: ${error.stack}`);
     return res.status(403).send({
       status: false,
       message: 'Unauthorized',
@@ -42,14 +37,14 @@ const verifyToken = async (req, res, next) => {
   }
 };
 
-const verifyRole = (roles) => (req, res, next) => {
-  if (!roles.includes(req.user.role)) {
-    throw CustomError.UnauthorizedError('Unauthorized');
-  }
-  next();
-};
+// const verifyRole = (roles) => (req, res, next) => {
+//   if (!roles.includes(req.user.role)) {
+//     throw CustomError.UnauthorizedError('Unauthorized');
+//   }
+//   next();
+// };
 
 module.exports = {
   verifyToken,
-  verifyRole,
+  // verifyRole,
 };

@@ -20,10 +20,7 @@ const login = async (payload) => {
   if (!user) {
     throw CustomErrors.BadRequestError('Email not found');
   }
-  const isMatch = await verifyPassword(
-    payload.password,
-    user.dataValues.password
-  );
+  const isMatch = await verifyPassword(payload.password, user.dataValues.password);
   if (!isMatch) {
     throw CustomErrors.BadRequestError('Invalid password');
   }
@@ -40,15 +37,9 @@ const forgotPassword = async (email) => {
 };
 
 const resetPassword = async (token, password) => {
-  const tokenDoc = await tokenService.verifyToken(
-    token,
-    config.jwt.secret,
-    tokenType.PASSWORD_RESET
-  );
+  const tokenDoc = await tokenService.verifyToken(token, config.jwt.secret, tokenType.PASSWORD_RESET);
   if (!tokenDoc) {
-    throw CustomErrors.UnauthorizedError(
-      'Password reset token is invalid or has expired'
-    );
+    throw CustomErrors.UnauthorizedError('Password reset token is invalid or has expired');
   }
   const user = await userService.getById(tokenDoc.dataValues.userId);
   user.password = password;
@@ -59,9 +50,7 @@ const resetPassword = async (token, password) => {
 const verifyEmail = async (token) => {
   const tokenDoc = await tokenService.verifyToken(token, config.jwt.secret, tokenType.EMAIL_VERIFICATION);
   if (!tokenDoc) {
-    throw CustomErrors.BadRequestError(
-      'Invalid or expired email verification token'
-    );
+    throw CustomErrors.BadRequestError('Invalid or expired email verification token');
   }
   const user = await userService.getById(tokenDoc.dataValues.userId);
   user.isEmailVerified = true;
@@ -84,11 +73,7 @@ const changePassword = async (payload) => {
 };
 
 const refreshAuth = async (refreshToken) => {
-  const tokenDoc = await tokenService.verifyToken(
-    refreshToken,
-    config.jwt.refreshTokenSecret,
-    tokenType.REFRESH
-  );
+  const tokenDoc = await tokenService.verifyToken(refreshToken, config.jwt.refreshTokenSecret, tokenType.REFRESH);
   const user = await userService.getById(tokenDoc.dataValues.userId);
   if (!user) {
     throw CustomErrors.BadRequestError('User not found');

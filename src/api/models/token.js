@@ -15,7 +15,13 @@ module.exports = (sequelize, DataTypes) => {
         unique: true,
       },
       type: {
-        type: DataTypes.ENUM(tokenType.ACCESS, tokenType.REFRESH, tokenType.JWT, tokenType.EMAIL_VERIFICATION, tokenType.PASSWORD_RESET),
+        type: DataTypes.ENUM(
+          tokenType.ACCESS,
+          tokenType.REFRESH,
+          tokenType.JWT,
+          tokenType.EMAIL_VERIFICATION,
+          tokenType.PASSWORD_RESET
+        ),
         allowNull: false,
       },
       expires: {
