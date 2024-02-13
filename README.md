@@ -54,21 +54,17 @@ DB_PORT  =  5432
   
 # JWT
 
-JWT_SECRET  =  "jwtsecreatkey"
+JWT_SECRET = ""
 
-JWT_EXPIRATION  =  "1d"
+SALT_ROUND = 5
 
-ACCESS_TOKEN_SECRET  =  "jwtsecreatkey"
+JWT_EXPIRATION = "1d"
 
-ACCESS_TOKEN_EXPIRATION_MINUTES  =  7
+ACCESS_TOKEN_EXPIRATION = "14m"
 
-REFRESH_TOKEN_SECRET  =  "jwtsecreatkey"
+REFRESH_TOKEN_EXPIRATION = "90d"
 
-REFRESH_TOKEN_EXPIRATION_DAYS  =  90
-
-RESET_PASSWORD_TOKEN_EXPIRATION_MINUTES  =  10
-
-VERIFY_EMAIL_TOKEN_EXPIRATION_MINUTES  =  10
+PASSWORD_TOKEN_EXPIRATION = "90m"
 
   
 # Email (NodeMailer)(Ethereal mail)
@@ -120,14 +116,14 @@ project-root/
 |	|--logs             # logs
 |--src/
 |	|--api/
-|		|--controllers. # Route Controler
+|		|--controllers. # Route Controller
 |		|--models       # Sequelize models 
 |		|--services.    # service
 |	|--config.          # project config
 |	|--middlewares      # custom express middlewares
 |	|--routs. 			# Express routs
 |	|--utils. 			# Utility functions
-|	|--validatios.  	# Data validation schema
+|	|--validations.  	# Data validation schema
 |--app.js. 				# Express app
 |--server.js. 			# Entry point
 ```

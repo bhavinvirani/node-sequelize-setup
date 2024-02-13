@@ -1,10 +1,16 @@
-const { Model } = require('sequelize');
+const { Model, Sequelize } = require('sequelize');
 const bcrypt = require('bcrypt');
+const { jwtConfig } = require('../../config/config');
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      this.hasMany(models.Token, {
+      this.belongsTo(models.Role, {
+        foreignKey: 'roleId',
+        as: 'role',
+        targetKey: 'id',
+      });
+      this.hasMany(models.RefreshToken, {
         foreignKey: 'userId',
         as: 'tokens',
         onDelete: 'CASCADE',
@@ -13,6 +19,12 @@ module.exports = (sequelize, DataTypes) => {
   }
   User.init(
     {
+      id: {
+        primaryKey: true,
+        type: DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        allowNull: false,
+      },
       name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -49,11 +61,19 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
-      isEmailVerified: {
+      isVerified: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
+      otp: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       password: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      token: {
         type: DataTypes.TEXT,
         allowNull: true,
       },
@@ -61,6 +81,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: 'User',
+      timestamps: true,
+      paranoid: true,
       defaultScope: {
         attributes: { exclude: ['password'] },
       },
@@ -69,14 +91,14 @@ module.exports = (sequelize, DataTypes) => {
 
   User.beforeCreate(async (user) => {
     if (user.password) {
-      const hashedPassword = await bcrypt.hash(user.password, 10);
+      const hashedPassword = await bcrypt.hash(user.password, jwtConfig.saltRound);
       user.password = hashedPassword;
     }
   });
 
   User.beforeUpdate(async (user) => {
     if (user.changed('password')) {
-      const hashedPassword = await bcrypt.hash(user.password, 10);
+      const hashedPassword = await bcrypt.hash(user.password, jwtConfig.saltRound);
       user.password = hashedPassword;
     }
   });

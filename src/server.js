@@ -1,10 +1,10 @@
 require('dotenv').config({ path: './.env' });
-const config = require('./config/config');
+const { envConfig } = require('./config/config');
 const { sequelize } = require('./api/models');
 const logger = require('./config/logger');
 const app = require('./app');
 
-const port = config.port || 8080;
+const port = envConfig.port || 8080;
 const server = app.listen(port, async () => {
   try {
     await sequelize.authenticate();

@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const CustomError = require('../errors');
 const { userService } = require('../api/services');
-const config = require('../config/config');
+const { jwtConfig } = require('../config/config');
 const logger = require('../config/logger');
 
 const verifyToken = async (req, res, next) => {
@@ -14,7 +14,7 @@ const verifyToken = async (req, res, next) => {
     });
   }
   try {
-    const accessTokenDoc = jwt.verify(accessToken, config.jwt.accessTokenSecret);
+    const accessTokenDoc = jwt.verify(accessToken, jwtConfig.secret);
     const user = await userService.getById(accessTokenDoc.sub);
     req.user = user;
     next();
@@ -25,13 +25,16 @@ const verifyToken = async (req, res, next) => {
         status: false,
         message: 'Access token has expired',
         data: null,
-        isAccessTokenExpired: true,
+        isExpired: true,
+        // isAccessTokenExpired: true,
       });
     }
-    logger.error(`Message: ${error.message} || Status: ${error.statusCode} || Stack: ${error.stack}`);
+    logger.error(
+      `Message: ${error.message} || Status: ${error.statusCode} || Stack: ${error.stack}`
+    );
     return res.status(403).send({
       status: false,
-      message: 'Unauthorized',
+      message: 'Authentication failed || internal server error',
       data: null,
     });
   }

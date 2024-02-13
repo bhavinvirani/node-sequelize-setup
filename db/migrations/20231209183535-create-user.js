@@ -4,10 +4,19 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Users', {
       id: {
-        allowNull: false,
-        autoIncrement: true,
+        type: Sequelize.UUID,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        defaultValue: Sequelize.UUIDV4,
+        allowNull: false,
+      },
+      roleId: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        references: {
+          model: 'Roles',
+          key: 'id',
+        },
+        onDelete: 'CASCADE',
       },
       name: {
         type: Sequelize.STRING,
@@ -24,11 +33,19 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
       },
-      isEmailVerified: {
+      isVerified: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
       },
+      otp: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       password: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+      },
+      token: {
         type: Sequelize.TEXT,
         allowNull: true,
       },
@@ -39,6 +56,10 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
+      },
+      deletedAt: {
+        type: Sequelize.DATE,
+        allowNull: true,
       },
     });
   },

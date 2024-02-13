@@ -4,14 +4,6 @@ const environment = {
   TEST: 'test',
 };
 
-const tokenType = {
-  JWT: 'jwt',
-  ACCESS: 'access',
-  REFRESH: 'refresh',
-  EMAIL_VERIFICATION: 'emailVerification',
-  PASSWORD_RESET: 'passwordReset',
-};
-
 const statusCode = {
   SUCCESS: 200,
   CREATED: 201,
@@ -24,7 +16,6 @@ const statusCode = {
 
 module.exports = {
   environment,
-  tokenType,
   statusCode,
 };
 

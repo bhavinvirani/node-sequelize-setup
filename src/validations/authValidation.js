@@ -38,15 +38,18 @@ const forgotPassword = {
 const resetPassword = {
   body: joi.object().keys({
     password: joi.string().required().custom(password),
+    confirmPassword: joi.string().required().custom(password),
+    otp: joi.number().required(),
   }),
   query: joi.object().keys({
     token: joi.string().required(),
   }),
 };
 
-const verifyEmail = {
-  query: joi.object().keys({
-    token: joi.string().required(),
+const verifyUser = {
+  body: joi.object().keys({
+    // otp: joi.string().required(),
+    otp: joi.number().required(),
   }),
 };
 module.exports = {
@@ -56,5 +59,5 @@ module.exports = {
   forgotPassword,
   resetPassword,
   refreshTokens,
-  verifyEmail,
+  verifyUser,
 };

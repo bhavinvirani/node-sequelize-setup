@@ -18,13 +18,11 @@ const envVarsSchema = Joi.object({
 
   // JWT
   JWT_SECRET: Joi.string().required().description('JWT secret key'),
+  SALT_ROUND: Joi.number().required().description('Salt round for hashing'),
   JWT_EXPIRATION: Joi.string().required().description('JWT expiration time'),
-  ACCESS_TOKEN_SECRET: Joi.string().required().description('Access token secret key'),
-  ACCESS_TOKEN_EXPIRATION_MINUTES: Joi.number().required().description('Access token expiration time'),
-  REFRESH_TOKEN_SECRET: Joi.string().required().description('Refresh token secret key'),
-  REFRESH_TOKEN_EXPIRATION_DAYS: Joi.number().required().description('Refresh token expiration time'),
-  RESET_PASSWORD_TOKEN_EXPIRATION_MINUTES: Joi.number().required().description('Reset password token expiration time'),
-  VERIFY_EMAIL_TOKEN_EXPIRATION_MINUTES: Joi.number().required().description('Verify email token expiration time'),
+  ACCESS_TOKEN_EXPIRATION: Joi.string().required().description('Access token expiration time'),
+  REFRESH_TOKEN_EXPIRATION: Joi.string().required().description('Refresh token expiration time'),
+  PASSWORD_TOKEN_EXPIRATION: Joi.string().required().description('Password reset token expiration time'),
 
   // Mail
   SMTP_HOST: Joi.string().description('server that will send the emails'),
@@ -36,6 +34,11 @@ const envVarsSchema = Joi.object({
   CLOUDINARY_CLOUD_NAME: Joi.string().description('Cloudinary cloud name'),
   CLOUDINARY_API_KEY: Joi.string().description('Cloudinary API key'),
   CLOUDINARY_API_SECRET: Joi.string().description('Cloudinary API secret'),
+
+  // OTP
+  OTP_SECRET: Joi.string().required().description('OTP secret key'),
+  OTP_EXPIRY_MINUTES: Joi.number().required().description('OTP expiration time'),
+  OTP_LENGTH: Joi.number().required().description('OTP length'),
 })
   .prefs({ errors: { label: 'key' } })
   .unknown();
@@ -58,13 +61,11 @@ const {
   DB_USERNAME,
   DB_DIALECT,
   JWT_SECRET,
+  SALT_ROUND,
   JWT_EXPIRATION,
-  ACCESS_TOKEN_SECRET,
-  ACCESS_TOKEN_EXPIRATION_MINUTES,
-  REFRESH_TOKEN_SECRET,
-  REFRESH_TOKEN_EXPIRATION_DAYS,
-  RESET_PASSWORD_TOKEN_EXPIRATION_MINUTES,
-  VERIFY_EMAIL_TOKEN_EXPIRATION_MINUTES,
+  ACCESS_TOKEN_EXPIRATION,
+  REFRESH_TOKEN_EXPIRATION,
+  PASSWORD_TOKEN_EXPIRATION,
   SMTP_HOST,
   SMTP_PORT,
   SMTP_USERNAME,
@@ -73,44 +74,64 @@ const {
   CLOUDINARY_CLOUD_NAME,
   CLOUDINARY_API_KEY,
   CLOUDINARY_API_SECRET,
+  OTP_EXPIRY_MINUTES,
+  OTP_LENGTH,
+  OTP_SECRET,
 } = envVars;
 
-module.exports = {
+const envConfig = {
   env: NODE_ENV,
   port: PORT,
   corsOrigin: CORS_ORIGIN,
-  postgres: {
-    host: DB_HOST,
-    port: DB_PORT,
-    password: DB_PASSWORD,
-    db: DB_NAME,
-    username: DB_USERNAME,
-    dialect: DB_DIALECT,
-  },
-  jwt: {
-    secret: JWT_SECRET,
-    expiration: JWT_EXPIRATION,
-    accessTokenSecret: ACCESS_TOKEN_SECRET,
-    accessTokenExpirationMinutes: ACCESS_TOKEN_EXPIRATION_MINUTES,
-    refreshTokenSecret: REFRESH_TOKEN_SECRET,
-    refreshTokenExpirationDays: REFRESH_TOKEN_EXPIRATION_DAYS,
-    resetPasswordExpirationMinutes: RESET_PASSWORD_TOKEN_EXPIRATION_MINUTES,
-    verifyEmailExpirationMinutes: VERIFY_EMAIL_TOKEN_EXPIRATION_MINUTES,
-  },
-  email: {
-    smtp: {
-      host: SMTP_HOST,
-      port: SMTP_PORT,
-      auth: {
-        user: SMTP_USERNAME,
-        pass: SMTP_PASSWORD,
-      },
+};
+
+const databaseConfig = {
+  host: DB_HOST,
+  port: DB_PORT,
+  password: DB_PASSWORD,
+  db: DB_NAME,
+  username: DB_USERNAME,
+  dialect: DB_DIALECT,
+};
+
+const jwtConfig = {
+  secret: JWT_SECRET,
+  saltRound: SALT_ROUND,
+  expiration: JWT_EXPIRATION,
+  accessTokenExpiration: ACCESS_TOKEN_EXPIRATION,
+  refreshTokenExpiration: REFRESH_TOKEN_EXPIRATION,
+  passwordResetTokenExpiration: PASSWORD_TOKEN_EXPIRATION,
+};
+
+const emailConfig = {
+  smtp: {
+    host: SMTP_HOST,
+    port: SMTP_PORT,
+    auth: {
+      user: SMTP_USERNAME,
+      pass: SMTP_PASSWORD,
     },
-    from: SMTP_EMAIL_FROM,
   },
-  cloudinary: {
-    cloudName: CLOUDINARY_CLOUD_NAME,
-    apiKey: CLOUDINARY_API_KEY,
-    apiSecret: CLOUDINARY_API_SECRET,
-  },
+  from: SMTP_EMAIL_FROM,
+};
+
+const cloudinaryConfig = {
+  cloudName: CLOUDINARY_CLOUD_NAME,
+  apiKey: CLOUDINARY_API_KEY,
+  apiSecret: CLOUDINARY_API_SECRET,
+};
+
+const otpConfig = {
+  otpSecret: OTP_SECRET,
+  otpExpiry: OTP_EXPIRY_MINUTES,
+  otpLength: OTP_LENGTH,
+};
+
+module.exports = {
+  envConfig,
+  databaseConfig,
+  jwtConfig,
+  emailConfig,
+  cloudinaryConfig,
+  otpConfig,
 };
